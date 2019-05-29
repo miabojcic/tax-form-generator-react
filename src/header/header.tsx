@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import { Menu } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/styles';
+import { NavLink } from 'react-router-dom';
 
 export const Header: React.FC = () => {
     const useStyles = makeStyles({
@@ -14,12 +15,17 @@ export const Header: React.FC = () => {
         spacer: {
             flexGrow: 1,
         },
+        navLinks: {
+          textDecoration:'none',
+        },
         btn: {
-          color: 'white',
+            color: 'white',
         },
     });
     const classes=useStyles();
+
     const [anchorEl, setAnchorEl] = React.useState(null);
+
 
     function handleClick(event: any) {
         setAnchorEl(event.currentTarget);
@@ -30,15 +36,15 @@ export const Header: React.FC = () => {
     }
     return (
         <div className={classes.header}>
-            <Button size="small" className={classes.btn} href='dashboard'>
-                Dashboard
-            </Button>
-            <Button size="small" className={classes.btn} href='generate-form'>
-            Generate Form
-            </Button>
-            <Button size="small" className={classes.btn} href='settings'>
-                Settings
-            </Button>
+            <NavLink className={classes.navLinks} to='/dashboard'>
+                <Button size='small' className={classes.btn}>Dashboard</Button>
+            </NavLink>
+            <NavLink className={classes.navLinks} to='/generate-form'>
+                <Button size='small' className={classes.btn}>Generate Form</Button>
+            </NavLink>
+            <NavLink className={classes.navLinks} to='/settings'>
+                <Button size='small' className={classes.btn}>Settings</Button>
+            </NavLink>
             <div className={classes.spacer}></div>
             <div>
                 <Button
