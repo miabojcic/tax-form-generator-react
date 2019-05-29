@@ -7,11 +7,15 @@ import { makeStyles } from '@material-ui/styles';
 export const Header: React.FC = () => {
     const useStyles = makeStyles({
         header: {
-            margin: '1rem',
+            padding: '1rem',
             display: 'flex',
+            backgroundColor: 'red',
         },
         spacer: {
             flexGrow: 1,
+        },
+        btn: {
+          color: 'white',
         },
     });
     const classes=useStyles();
@@ -26,21 +30,22 @@ export const Header: React.FC = () => {
     }
     return (
         <div className={classes.header}>
-            <Button size="small">
+            <Button size="small" className={classes.btn} href='dashboard'>
                 Dashboard
             </Button>
-            <Button size="small">
+            <Button size="small" className={classes.btn} href='generate-form'>
             Generate Form
             </Button>
-            <Button size="small">
+            <Button size="small" className={classes.btn} href='settings'>
                 Settings
             </Button>
             <div className={classes.spacer}></div>
             <div>
                 <Button
-                    aria-owns={anchorEl ? 'simple-menu' : undefined}
+                    aria-owns={anchorEl ? 'simple-menu' : undefined }
                     aria-haspopup="true"
                     onClick={handleClick}
+                    className={classes.btn}
                 >
                     miabojcic@gmail.com
                 </Button>
