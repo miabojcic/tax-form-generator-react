@@ -10,7 +10,7 @@ export const Header: React.FC = () => {
         header: {
             padding: '1rem',
             display: 'flex',
-            backgroundColor: 'red',
+            backgroundColor: '#f50057',
         },
         spacer: {
             flexGrow: 1,
@@ -33,6 +33,7 @@ export const Header: React.FC = () => {
 
     function handleClose() {
         setAnchorEl(null);
+
     }
     return (
         <div className={classes.header}>

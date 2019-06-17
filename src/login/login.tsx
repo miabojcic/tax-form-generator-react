@@ -5,7 +5,9 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
 
+
 export const Login: React.FC = () => {
+
     const useStyles = makeStyles({
         container: {
             display: 'flex',
@@ -34,7 +36,8 @@ export const Login: React.FC = () => {
             <div className={classes.registerInput}>
                 <TextField
                     className={classes.input}
-                    id="outlined-dense"
+                    id="email"
+                    name="email"
                     label="E-mail"
                     variant="outlined"
                     type="email"
@@ -42,7 +45,8 @@ export const Login: React.FC = () => {
                 />
                 <TextField
                     className={classes.input}
-                    id="outlined-dense"
+                    id="password"
+                    name="password"
                     label="Password"
                     variant="outlined"
                     type="password"

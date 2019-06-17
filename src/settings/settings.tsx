@@ -5,22 +5,29 @@ import Button from '@material-ui/core/Button';
 
 export const Settings: React.FC = () => {
     const useStyles = makeStyles({
-        container: {
+        form: {
             display: 'flex',
             flexDirection: 'column',
-            margin: '50px',
+            alignItems: 'flex-start',
         },
         margin: {
             margin: '0 2px',
         },
         btnSubmit: {
             marginTop: '30px',
-            textAlign: 'center',
+            alignSelf: 'center',
         },
+        container: {
+            padding: '50px',
+            display: 'flex',
+            justifyContent: 'center',
+        },
+
     });
     const classes=useStyles();
     return(
-        <form className={classes.container}>
+      <div className={classes.container}>
+        <form className={classes.form}>
             <div className="personalSettings">
                 <h2>Personal</h2>
                 <TextField
@@ -201,5 +208,6 @@ export const Settings: React.FC = () => {
                 </Button>
             </div>
         </form>
+      </div>
     );
 }

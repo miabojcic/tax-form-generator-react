@@ -2,6 +2,8 @@ import React from 'react';
 
 export const Dashboard: React.FC = () => {
     return(
-        <div>Dashboard</div>
+        <form>
+            <h2>Generated Forms</h2>
+        </form>
     );
 }
