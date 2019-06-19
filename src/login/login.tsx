@@ -11,10 +11,10 @@ import * as jwt_decode from 'jwt-decode';
 import { User } from './user';
 import { JwtToken } from './jwt-token';
 import { useSnackbar } from 'notistack';
+import { AuthConsumer } from '../shared/auth-context';
 
 
-
-export const Login: React.FC = () => {
+const Login: React.FC<{ updateState: (x: boolean, callback?: () => void) => void }> = (props) => {
 
     const useStyles = makeStyles({
         container: {
@@ -46,6 +46,7 @@ export const Login: React.FC = () => {
     const [redirection, setRedirection] = useState(false);
     let loggedInUser : User | undefined;
 
+
     function onChange(e: any) {
         setCredentials({ ...credentials, [e.target.name]: e.target.value } as Credentials);
     }
@@ -68,11 +69,15 @@ export const Login: React.FC = () => {
                     lastName: decodedAccessToken.lastName
                 };
                 localStorage.setItem('user',JSON.stringify(loggedInUser));
-                setRedirection(true);
+                props.updateState(true, () => {
+                    setRedirection(true);
+                });
+
             })
             .catch(() => {
                 enqueueSnackbar('Error. Email and/or password incorrect.',{ autoHideDuration: 3000 })
             })
+
 
     }
     function navigate() {
@@ -84,7 +89,7 @@ export const Login: React.FC = () => {
 
     }
     return(
-        <form className={classes.container} onSubmit={handleSubmit}>
+        <form className={classes.container} onSubmit={handleSubmit} >
             <h2>Tax Form Generator</h2>
             <div className={classes.registerInput}>
                 <TextField
@@ -124,3 +129,16 @@ export const Login: React.FC = () => {
         </form>
     );
 }
+
+export default (props: any) => (
+    <AuthConsumer>
+        {
+            ({ updateState, isLoggedIn }) => (
+                <>
+                  <Login {...props} updateState={updateState} />
+                    {isLoggedIn ? 'true' : 'false'}
+                </>
+            )
+        }
+    </AuthConsumer>
+);
