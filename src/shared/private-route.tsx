@@ -7,7 +7,6 @@ export const PrivateRoute: React.FC<any> = ( {component: Component, ...rest }) =
   <AuthConsumer>
       {(userAuthState) => (
           <Route {...rest} render={(props) => {
-              console.log('render privateRoute', userAuthState.isLoggedIn);
               return (userAuthState.isLoggedIn === true
                   ? <Component {...props} />
                   : <Redirect to='/login' />

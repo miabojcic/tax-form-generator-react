@@ -4,14 +4,13 @@ import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Link, Redirect, Switch } from 'react-router-dom';
 import { Credentials } from './credentials';
-import axios from 'axios';
-import { LoginResponse } from './login-response';
 // @ts-ignore
 import * as jwt_decode from 'jwt-decode';
 import { User } from './user';
 import { JwtToken } from './jwt-token';
 import { useSnackbar } from 'notistack';
 import { AuthConsumer } from '../shared/auth-context';
+import { http } from '../shared/http';
 
 
 const Login: React.FC<{ updateState: (x: boolean, callback?: () => void) => void }> = (props) => {
@@ -52,10 +51,7 @@ const Login: React.FC<{ updateState: (x: boolean, callback?: () => void) => void
     }
     function handleSubmit(e: any) {
         e.preventDefault();
-        const headers = {
-            "Content-Type": "application/json"
-        }
-        axios.post<LoginResponse>('http://localhost:5000/api/auth', credentials, {"headers" : headers})
+        http.post('api/auth', credentials)
             .then((response) => {
                 localStorage.setItem('accessToken', response.data.accessToken);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -133,10 +129,9 @@ const Login: React.FC<{ updateState: (x: boolean, callback?: () => void) => void
 export default (props: any) => (
     <AuthConsumer>
         {
-            ({ updateState, isLoggedIn }) => (
+            ({ updateState }) => (
                 <>
                   <Login {...props} updateState={updateState} />
-                    {isLoggedIn ? 'true' : 'false'}
                 </>
             )
         }

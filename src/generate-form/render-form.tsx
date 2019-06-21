@@ -29,7 +29,7 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
     switch (formType) {
         case 'DividendJOPPD':
             return (
-                <div className={classes.formLayout}>
+                <form className={classes.formLayout}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
                             className={classes.input}
@@ -88,17 +88,18 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
                                 variant="contained"
                                 size="medium"
                                 color="secondary"
+                                type="submit"
                             >
                                 Generate
                             </Button>
                         </div>
                     </MuiPickersUtilsProvider>
-                </div>
+                </form>
 
             );
         case 'SalaryJOPPD':
             return (
-                <div className={classes.formLayout}>
+                <form className={classes.formLayout}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
                             className={classes.input}
@@ -147,12 +148,13 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
                                 variant="contained"
                                 size="medium"
                                 color="secondary"
+                                type="submit"
                             >
                                 Generate
                             </Button>
                         </div>
                     </MuiPickersUtilsProvider>
-                </div>
+                </form>
             );
         default:
             return null;
