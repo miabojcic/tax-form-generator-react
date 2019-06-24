@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { SettingsData } from '../settings/settings-data';
 
 const baseUrl = 'http://localhost:5000';
 
@@ -28,7 +27,7 @@ const authHttp = {
         return axios.post<any>(`${baseUrl}/${url}`, data, { headers: authHeaders });
     },
     get: (url: string) => {
-        return axios.get<SettingsData>(`${baseUrl}/${url}`, { headers: authHeaders });
+        return axios.get<any>(`${baseUrl}/${url}`, { headers: authHeaders });
     }
 };
 
