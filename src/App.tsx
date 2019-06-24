@@ -25,7 +25,7 @@ const App: React.FC = () => {
                         <Route path="/" exact component={Dashboard} />
                         <PrivateRoute path="/dashboard" component={Dashboard} />
                         <PrivateRoute path="/settings" exact component={Settings} />
-                        <PrivateRoute path="/generate-form" exact component={GenerateForm} />
+                        <Route path="/generate-form" exact component={GenerateForm} />
                     </>
                 </Switch>
             </Router>

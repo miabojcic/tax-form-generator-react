@@ -38,10 +38,7 @@ const Login: React.FC<{ updateState: (x: boolean, callback?: () => void) => void
         }});
     const classes=useStyles();
     const { enqueueSnackbar } = useSnackbar();
-    const [credentials, setCredentials] = useState<Credentials>({
-        email: '',
-        password: '',
-    });
+    const [credentials, setCredentials] = useState<Credentials | undefined>(undefined);
     const [redirection, setRedirection] = useState(false);
     let loggedInUser : User | undefined;
 
