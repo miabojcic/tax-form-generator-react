@@ -20,9 +20,11 @@ const useStyles = makeStyles({
         margin: '10px',
     },
 });
-const classes=useStyles();
 
 export const Registration: React.FC = () => {
+
+    const classes=useStyles();
+
     return(
         <form className={classes.container}>
             <h2>Tax Form Generator</h2>

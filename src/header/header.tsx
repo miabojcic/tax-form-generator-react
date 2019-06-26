@@ -21,9 +21,11 @@ const useStyles = makeStyles({
         color: 'white',
     },
 });
-const classes=useStyles();
 
 export const Header: React.FC = () => {
+
+    const classes=useStyles();
+
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 

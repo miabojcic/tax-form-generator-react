@@ -17,9 +17,11 @@ const useStyles = makeStyles({
         textAlign: 'center',
     },
 });
-const classes=useStyles();
 
 export const Settings: React.FC = () => {
+
+    const classes=useStyles();
+
     return(
         <form className={classes.container}>
             <div className="personalSettings">

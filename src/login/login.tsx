@@ -25,9 +25,11 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         padding: '20px 0 30px',
     }});
-const classes=useStyles();
 
 export const Login: React.FC = () => {
+
+    const classes=useStyles();
+
     return(
         <form className={classes.container}>
             <h2>Tax Form Generator</h2>
