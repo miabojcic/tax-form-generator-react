@@ -3,22 +3,23 @@ import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 
+const useStyles = makeStyles({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '50px',
+    },
+    margin: {
+        margin: '0 2px',
+    },
+    btnSubmit: {
+        marginTop: '30px',
+        textAlign: 'center',
+    },
+});
+const classes=useStyles();
+
 export const Settings: React.FC = () => {
-    const useStyles = makeStyles({
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            margin: '50px',
-        },
-        margin: {
-            margin: '0 2px',
-        },
-        btnSubmit: {
-            marginTop: '30px',
-            textAlign: 'center',
-        },
-    });
-    const classes=useStyles();
     return(
         <form className={classes.container}>
             <div className="personalSettings">
