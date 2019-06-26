@@ -5,24 +5,25 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/styles';
 import { NavLink } from 'react-router-dom';
 
+const useStyles = makeStyles({
+    header: {
+        padding: '1rem',
+        display: 'flex',
+        backgroundColor: 'red',
+    },
+    spacer: {
+        flexGrow: 1,
+    },
+    navLinks: {
+        textDecoration:'none',
+    },
+    btn: {
+        color: 'white',
+    },
+});
+const classes=useStyles();
+
 export const Header: React.FC = () => {
-    const useStyles = makeStyles({
-        header: {
-            padding: '1rem',
-            display: 'flex',
-            backgroundColor: 'red',
-        },
-        spacer: {
-            flexGrow: 1,
-        },
-        navLinks: {
-          textDecoration:'none',
-        },
-        btn: {
-            color: 'white',
-        },
-    });
-    const classes=useStyles();
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
