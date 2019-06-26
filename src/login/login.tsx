@@ -4,17 +4,16 @@ import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Link, Redirect, Switch } from 'react-router-dom';
 import { Credentials } from './credentials';
-import axios from 'axios';
-import { LoginResponse } from './login-response';
 // @ts-ignore
 import * as jwt_decode from 'jwt-decode';
 import { User } from './user';
 import { JwtToken } from './jwt-token';
 import { useSnackbar } from 'notistack';
+import { AuthConsumer } from '../shared/auth-context';
+import { http } from '../shared/http';
 
 
-
-export const Login: React.FC = () => {
+const Login: React.FC<{ updateState: (x: boolean, callback?: () => void) => void }> = (props) => {
 
     const useStyles = makeStyles({
         container: {
@@ -39,22 +38,17 @@ export const Login: React.FC = () => {
         }});
     const classes=useStyles();
     const { enqueueSnackbar } = useSnackbar();
-    const [credentials, setCredentials] = useState<Credentials>({
-        email: '',
-        password: '',
-    });
+    const [credentials, setCredentials] = useState<Credentials | undefined>(undefined);
     const [redirection, setRedirection] = useState(false);
     let loggedInUser : User | undefined;
+
 
     function onChange(e: any) {
         setCredentials({ ...credentials, [e.target.name]: e.target.value } as Credentials);
     }
     function handleSubmit(e: any) {
         e.preventDefault();
-        const headers = {
-            "Content-Type": "application/json"
-        }
-        axios.post<LoginResponse>('http://localhost:5000/api/auth', credentials, {"headers" : headers})
+        http.post('api/auth', credentials)
             .then((response) => {
                 localStorage.setItem('accessToken', response.data.accessToken);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -68,11 +62,15 @@ export const Login: React.FC = () => {
                     lastName: decodedAccessToken.lastName
                 };
                 localStorage.setItem('user',JSON.stringify(loggedInUser));
-                setRedirection(true);
+                props.updateState(true, () => {
+                    setRedirection(true);
+                });
+
             })
             .catch(() => {
                 enqueueSnackbar('Error. Email and/or password incorrect.',{ autoHideDuration: 3000 })
             })
+
 
     }
     function navigate() {
@@ -84,7 +82,7 @@ export const Login: React.FC = () => {
 
     }
     return(
-        <form className={classes.container} onSubmit={handleSubmit}>
+        <form className={classes.container} onSubmit={handleSubmit} >
             <h2>Tax Form Generator</h2>
             <div className={classes.registerInput}>
                 <TextField
@@ -124,3 +122,15 @@ export const Login: React.FC = () => {
         </form>
     );
 }
+
+export default (props: any) => (
+    <AuthConsumer>
+        {
+            ({ updateState }) => (
+                <>
+                  <Login {...props} updateState={updateState} />
+                </>
+            )
+        }
+    </AuthConsumer>
+);
