@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/styles';
 import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { UserRegistration } from './user-registration';
-import axios from 'axios';
 import { RouteComponentProps } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { http } from '../shared/http';
 
 
 const useStyles = makeStyles({
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     },
 });
 
-export const Registration: React.FC<RouteComponentProps> = ({history}) => {
+export const Registration: React.FC<RouteComponentProps> = ({ history }) => {
 
     const classes=useStyles();
 
@@ -45,21 +45,18 @@ export const Registration: React.FC<RouteComponentProps> = ({history}) => {
         setState({ ...state, [e.target.name]: e.target.value } as UserRegistration);
     };
 
-    function handleSubmit(e: FormEvent) {
-        const headers = {
-            "Content-Type": "application/json"
-        }
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        axios.post('http://localhost:5000/api/accounts', state, {"headers" : headers})
-            .then(() => {
-                    enqueueSnackbar('Registered successfully.', { autoHideDuration: 1000 });
-                    history.push('/login');
-
+        http.post('api/accounts', state)
+            .then( () => {
+                enqueueSnackbar('Registered successfully.', { autoHideDuration: 1000 });
+                history.push('/login');
             })
-            .catch(() => {
+            .catch( () => {
                 enqueueSnackbar('Error. Failed to add user.',{ autoHideDuration: 1000 })
-            })
-    }
+
+            } );
+    };
 
     return(
         <form className={classes.container} onSubmit={handleSubmit}>
@@ -67,7 +64,6 @@ export const Registration: React.FC<RouteComponentProps> = ({history}) => {
             <div className={classes.registerInput}>
                 <TextField
                     className={classes.input}
-                    id="email"
                     name="email"
                     value={state.email}
                     label="E-mail"
@@ -78,7 +74,6 @@ export const Registration: React.FC<RouteComponentProps> = ({history}) => {
                 />
                 <TextField
                     className={classes.input}
-                    id="first-name"
                     name="firstName"
                     value={state.firstName}
                     label="First Name"
@@ -89,7 +84,6 @@ export const Registration: React.FC<RouteComponentProps> = ({history}) => {
                 />
                 <TextField
                     className={classes.input}
-                    id="last-name"
                     name="lastName"
                     value={state.lastName}
                     label="Last Name"
@@ -100,7 +94,6 @@ export const Registration: React.FC<RouteComponentProps> = ({history}) => {
                 />
                 <TextField
                     className={classes.input}
-                    id="password"
                     name="password"
                     value={state.password}
                     label="Password"
@@ -111,7 +104,6 @@ export const Registration: React.FC<RouteComponentProps> = ({history}) => {
                 />
                 <TextField
                     className={classes.input}
-                    id="confirm-password"
                     label="Confirm Password"
                     variant="outlined"
                     type="password"

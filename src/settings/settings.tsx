@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import { SettingsData } from './settings-data';
 import { authHttp } from '../shared/http';
 import { useSnackbar } from 'notistack';
+import { RouteComponentProps } from 'react-router';
 
 const useStyles = makeStyles({
     form: {
@@ -26,9 +27,11 @@ const useStyles = makeStyles({
 
 });
 
-export const Settings: React.FC = () => {
+export const Settings: React.FC<RouteComponentProps> = () => {
     const classes = useStyles();
+
     const { enqueueSnackbar } = useSnackbar();
+
     const [settingsData, setSettingsData] = useState<SettingsData>({
         personal: {
             personalOib: 0,
@@ -65,7 +68,8 @@ export const Settings: React.FC = () => {
             dividendTax: 0,
         }
     });
-    function onChange(e: any) {
+
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         const personal = {...settingsData.personal, [e.target.name]: e.target.value};
         const city = {...settingsData.city, [e.target.name]: e.target.value};
         const company = {...settingsData.company, [e.target.name]: e.target.value};
@@ -81,8 +85,9 @@ export const Settings: React.FC = () => {
 
         setSettingsData(data);
 
-    }
-    function handleSubmit(e: any) {
+    };
+
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         authHttp.post('api/settings', settingsData)
             .then(() => {
@@ -93,12 +98,14 @@ export const Settings: React.FC = () => {
 
             })
 
-    }
+    };
+
     useEffect(() => {
-        authHttp.get('api/settings').then((response) =>
+        authHttp.get<SettingsData>('api/settings').then((response) =>
             setSettingsData(response.data)
         );
     }, []);
+
     return(
       <div className={classes.container}>
         <form className={classes.form}  onSubmit={handleSubmit}>

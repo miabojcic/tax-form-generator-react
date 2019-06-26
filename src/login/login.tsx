@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { Link, Redirect, Switch } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Credentials } from './credentials';
-// @ts-ignore
-import * as jwt_decode from 'jwt-decode';
-import { User } from './user';
-import { JwtToken } from './jwt-token';
 import { useSnackbar } from 'notistack';
 import { AuthConsumer } from '../shared/auth-context';
 import { http } from '../shared/http';
+import { LoginResponse } from './login-response';
+import { auth } from '../shared/auth';
 
 const useStyles = makeStyles({
     container: {
@@ -34,60 +32,45 @@ const useStyles = makeStyles({
         padding: '20px 0 30px',
     }});
 
-const Login: React.FC<{ updateState: (x: boolean, callback?: () => void) => void }> = (props) => {
+interface LoginProps extends RouteComponentProps {
+    updateState: (x: boolean, callback?: () => void) => void;
+}
+
+const Login: React.FC<LoginProps> = (props) => {
 
     const classes = useStyles();
+
     const { enqueueSnackbar } = useSnackbar();
+
     const [credentials, setCredentials] = useState<Credentials | undefined>(undefined);
-    const [redirection, setRedirection] = useState(false);
-    let loggedInUser : User | undefined;
 
 
-    function onChange(e: any) {
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value } as Credentials);
-    }
-    function handleSubmit(e: any) {
-        e.preventDefault();
-        http.post('api/auth', credentials)
-            .then((response) => {
-                localStorage.setItem('accessToken', response.data.accessToken);
-                localStorage.setItem('refreshToken', response.data.refreshToken);
+    };
 
-                const accessToken = localStorage.getItem('accessToken');
-                const decodedAccessToken: JwtToken = jwt_decode(accessToken);
-                loggedInUser = {
-                    id: +decodedAccessToken.id,
-                    email: decodedAccessToken.email,
-                    firstName: decodedAccessToken.firstName,
-                    lastName: decodedAccessToken.lastName
-                };
-                localStorage.setItem('user',JSON.stringify(loggedInUser));
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+
+        http.post<LoginResponse>('api/auth', credentials)
+            .then((response) => {
+                auth.storeSessionData(response.data);
                 props.updateState(true, () => {
-                    setRedirection(true);
+                    props.history.push('/dashboard');
                 });
 
             })
             .catch(() => {
                 enqueueSnackbar('Error. Email and/or password incorrect.',{ autoHideDuration: 3000 })
             })
+    };
 
-
-    }
-    function navigate() {
-        return(
-            <Switch>
-                <Redirect to="/dashboard"/>
-            </Switch>
-        );
-
-    }
     return(
         <form className={classes.container} onSubmit={handleSubmit} >
             <h2>Tax Form Generator</h2>
             <div className={classes.registerInput}>
                 <TextField
                     className={classes.input}
-                    id="email"
                     name="email"
                     label="E-mail"
                     variant="outlined"
@@ -97,7 +80,6 @@ const Login: React.FC<{ updateState: (x: boolean, callback?: () => void) => void
                 />
                 <TextField
                     className={classes.input}
-                    id="password"
                     name="password"
                     label="Password"
                     variant="outlined"
@@ -118,12 +100,11 @@ const Login: React.FC<{ updateState: (x: boolean, callback?: () => void) => void
                     Login
                 </Button>
             </div>
-            {redirection && navigate()}
         </form>
     );
-}
+};
 
-export default (props: any) => (
+export default (props: RouteComponentProps) => (
     <AuthConsumer>
         {
             ({ updateState }) => (

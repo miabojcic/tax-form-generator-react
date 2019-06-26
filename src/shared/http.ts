@@ -14,20 +14,20 @@ const authHeaders = {
 }
 
 const http = {
-    post: (url: string, data: any) => {
-        return axios.post<any>(`${baseUrl}/${url}`, data, { headers });
+    post: <T>(url: string, data: any) => {
+        return axios.post<T>(`${baseUrl}/${url}`, data, { headers });
     },
-    get: (url: string) => {
-        return axios.get<any>(`${baseUrl}/${url}`, { headers });
+    get: <T>(url: string) => {
+        return axios.get<T>(`${baseUrl}/${url}`, { headers });
     }
 };
 
 const authHttp = {
-    post: (url: string, data: any) => {
-        return axios.post<any>(`${baseUrl}/${url}`, data, { headers: authHeaders });
+    post: <T>(url: string, data: any) => {
+        return axios.post<T>(`${baseUrl}/${url}`, data, { headers: authHeaders });
     },
-    get: (url: string) => {
-        return axios.get<any>(`${baseUrl}/${url}`, { headers: authHeaders });
+    get: <T>(url: string) => {
+        return axios.get<T>(`${baseUrl}/${url}`, { headers: authHeaders });
     }
 };
 

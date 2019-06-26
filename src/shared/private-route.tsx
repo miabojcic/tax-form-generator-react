@@ -3,6 +3,7 @@ import { Redirect, Route } from 'react-router';
 import { AuthConsumer } from './auth-context';
 
 export const PrivateRoute: React.FC<any> = ( {component: Component, ...rest }) => {
+
     return (
   <AuthConsumer>
       {(userAuthState) => (
@@ -13,7 +14,7 @@ export const PrivateRoute: React.FC<any> = ( {component: Component, ...rest }) =
           )}} />
       )}
   </AuthConsumer>
-)}
+)};
 
 
 

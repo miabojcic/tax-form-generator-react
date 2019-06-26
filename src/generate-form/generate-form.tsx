@@ -1,30 +1,34 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { RenderForm } from './render-form';
+import { RouteComponentProps } from 'react-router';
 
+const useStyles = makeStyles({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '50px',
+        alignItems: 'center',
+    },
+    formControl: {
+        width: '200px',
+    },
+    input: {
+        margin: '10px',
+    },
+});
 
-export const GenerateForm: React.FC = () => {
-    const useStyles = makeStyles({
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            margin: '50px',
-            alignItems: 'center',
-        },
-        formControl: {
-            width: '200px',
-        },
-        input: {
-            margin: '10px',
-        },
-    });
+export const GenerateForm: React.FC<RouteComponentProps> = ({history}) => {
 
     const classes = useStyles();
+
     const [formType, setFormType] = React.useState('');
-    function handleChange(event: any) {
-        setFormType(event.target.value);
-    }
+
+    const onChange = (event: ChangeEvent<{ name?: string; value: unknown }>) => {
+        setFormType(event.target.value as string)
+    };
+
     return(
         <div className={classes.container}>
             <form className={classes.container}>
@@ -32,7 +36,7 @@ export const GenerateForm: React.FC = () => {
                     <InputLabel htmlFor="select-form-type">Select form type</InputLabel>
                     <Select
                         value={formType}
-                        onChange={handleChange}
+                        onChange={onChange}
                         inputProps={{
                             name: 'formType',
                             id: 'select-form-type',
@@ -44,7 +48,7 @@ export const GenerateForm: React.FC = () => {
                 </FormControl>
 
             </form>
-            <RenderForm formType={formType}/>
+            <RenderForm formType={formType} history={history}/>
         </div>
     );
 }

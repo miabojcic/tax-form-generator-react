@@ -7,28 +7,36 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Paper from '@material-ui/core/Paper';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Form } from '../generate-form/form';
+import { RouteComponentProps } from 'react-router';
 
-export const Dashboard: React.FC = () => {
-    const useStyles = makeStyles({
-        container: {
-            width: '100%',
-            marginTop: '50px',
-            overflowX: 'auto'
-        },
-        table: {
-            minWidth: 650
-        }
-    });
 
-    const [displayForms, setDisplayForms] = useState<any[]>([]);
+const useStyles = makeStyles({
+    container: {
+        width: '100%',
+        marginTop: '50px',
+        overflowX: 'auto'
+    },
+    table: {
+        minWidth: 650
+    }
+});
+
+
+export const Dashboard: React.FC<RouteComponentProps> = () => {
+
+    const [displayForms, setDisplayForms] = useState<Form[]>([]);
+
     const classes = useStyles();
+
     useEffect(() => {
-        authHttp.get('api/forms').then((response) =>
+        authHttp.get<Form[]>('api/forms').then((response) =>
         {
             setDisplayForms(response.data);
         }
         )
     }, []);
+
     return(
       <Paper className={classes.container}>
         <Table className={classes.table}>

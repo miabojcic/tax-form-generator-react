@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -7,61 +7,68 @@ import Button from '@material-ui/core/Button';
 import { DividendJOPPD, SalaryJOPPD } from './form';
 import { authHttp } from '../shared/http';
 import { useSnackbar } from 'notistack';
-import { Redirect, Switch } from 'react-router';
+import * as H from 'history';
+
+const useStyles = makeStyles({
+    input: {
+        margin: '10px',
+        width: '200px',
+    },
+    formLayout: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    btnSubmit: {
+        marginTop: '30px',
+        alignSelf: 'center',
+    },
+
+});
 
 
-export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
-    const useStyles = makeStyles({
-        input: {
-            margin: '10px',
-            width: '200px',
-        },
-        formLayout: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        btnSubmit: {
-            marginTop: '30px',
-            alignSelf: 'center',
-        },
+export const RenderForm: React.FC<{ formType: string, history: H.History }> = ({ formType, history }) => {
 
-    });
     const classes = useStyles();
+
     const { enqueueSnackbar } = useSnackbar();
 
-    const [redirection, setRedirection] = useState(false);
-
-    const [formDate, setFormDate] = React.useState(new Date('2014-08-18T21:11:54'));
-    const [paymentDate, setPaymentDate] = React.useState(new Date('2014-08-18T21:11:54'));
-    const [startDate, setStartDate] = React.useState(new Date('2014-08-18T21:11:54'));
-    const [endDate, setEndDate] = React.useState(new Date('2014-08-18T21:11:54'));
+    const [formDate, setFormDate] = React.useState(new Date());
+    const [paymentDate, setPaymentDate] = React.useState(new Date());
+    const [startDate, setStartDate] = React.useState(new Date());
+    const [endDate, setEndDate] = React.useState(new Date());
     const [amount, setAmount] = React.useState();
     const [currency, setCurrency] = React.useState();
     const [salaryMonth, setSalaryMonth] = React.useState();
 
-    function handleFormDate(date: any) {
+    const handleFormDate = (date: any) => {
         setFormDate(date);
-    }
-    function handlePaymentDate(date: any) {
-        setPaymentDate(date);
-    }
-    function handleStartDate(date: any) {
-        setStartDate(date);
-    }
-    function handleEndDate(date: any) {
-        setEndDate(date);
-    }
-    function handleChangeAmount(e: any) {
-        setAmount(e.target.value);
-    }
-    function handleChangeCurrency(e: any) {
-        setCurrency(e.target.value);
-    }
-    function handleChangeSalaryMonth(e: any) {
-        setSalaryMonth(e.target.value);
-    }
+    };
 
-    function handleSubmitForDividend(event: any) {
+    const handlePaymentDate = (date: any) => {
+        setPaymentDate(date);
+    };
+
+    const handleStartDate = (date: any) => {
+        setStartDate(date);
+    };
+
+    const handleEndDate = (date: any) => {
+        setEndDate(date);
+    };
+
+    const handleChangeAmount = (e: ChangeEvent<HTMLInputElement>) => {
+        setAmount(e.target.value);
+    };
+
+    const handleChangeCurrency = (e: ChangeEvent<HTMLInputElement>) => {
+        setCurrency(e.target.value);
+    };
+
+    const handleChangeSalaryMonth = (e: ChangeEvent<HTMLInputElement>) => {
+        setSalaryMonth(e.target.value);
+    };
+
+    const handleSubmitForDividend = (event: FormEvent) => {
         event.preventDefault();
         const form = {
             formType: 'DIVIDEND_JOPPD',
@@ -71,10 +78,11 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
             endDate: endDate.toDateString(),
             amount: amount,
             currency: currency
-        }
+        };
         sendRequest(form);
-    }
-    function handleSubmitForSalary(event: any) {
+    };
+
+    const handleSubmitForSalary = (event: FormEvent) => {
         event.preventDefault();
         const form = {
             formType: 'SALARY_JOPPD',
@@ -83,30 +91,23 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
             amount: amount,
             currency: currency,
             salaryMonth: salaryMonth
-        }
+        };
         sendRequest(form);
 
-    }
-    function sendRequest(form: DividendJOPPD | SalaryJOPPD) {
+    };
+
+    const sendRequest = (form: DividendJOPPD | SalaryJOPPD) => {
         authHttp.post(`api/forms/${form.formType}`, form)
             .then( () => {
-                setRedirection(true);
-                enqueueSnackbar('Saved successfully.',{ autoHideDuration: 1000 })
+                enqueueSnackbar('Saved successfully.',{ autoHideDuration: 1000 });
+                history.push('/dashboard');
             }
 
             )
             .catch(() =>
                 enqueueSnackbar('Error. Failed to generate form.',{ autoHideDuration: 3000 })
             )
-    }
-    function navigate() {
-        return(
-            <Switch>
-                <Redirect to="/dashboard"/>
-            </Switch>
-        );
-
-    }
+    };
 
     switch (formType) {
         case 'DividendJOPPD':
@@ -115,7 +116,6 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
                             className={classes.input}
-                            id="formDate"
                             name="formDate"
                             label="Form date"
                             value={formDate}
@@ -124,35 +124,33 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
                         />
                         <KeyboardDatePicker
                             className={classes.input}
-                            id="paymentDate"
                             name="paymentDate"
                             label="Payment date"
                             value={paymentDate}
                             onChange={handlePaymentDate}
                             required
                         />
-                        <TextField
-                            className={classes.input}
-                            id="amount"
-                            name="amount"
-                            label="Amount"
-                            type="number"
-                            required
-                            onChange={handleChangeAmount}
+                    </MuiPickersUtilsProvider>
+                    <TextField
+                        className={classes.input}
+                        name="amount"
+                        label="Amount"
+                        type="number"
+                        required
+                        onChange={handleChangeAmount}
 
-                        />
-                        <TextField
-                            className={classes.input}
-                            id="currency"
-                            name="currency"
-                            label="Currency"
-                            type="text"
-                            required
-                            onChange={handleChangeCurrency}
-                        />
+                    />
+                    <TextField
+                        className={classes.input}
+                        name="currency"
+                        label="Currency"
+                        type="text"
+                        required
+                        onChange={handleChangeCurrency}
+                    />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
                             className={classes.input}
-                            id="startDate"
                             name="startDate"
                             label="Start date"
                             value={startDate}
@@ -161,25 +159,23 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
                         />
                         <KeyboardDatePicker
                             className={classes.input}
-                            id="endDate"
                             name="endDate"
                             label="End date"
                             value={endDate}
                             onChange={handleEndDate}
                             required
                         />
-                        <div className={classes.btnSubmit}>
-                            <Button
-                                variant="contained"
-                                size="medium"
-                                color="secondary"
-                                type="submit"
-                            >
-                                Generate
-                            </Button>
-                        </div>
-                        {redirection && navigate()}
                     </MuiPickersUtilsProvider>
+                    <div className={classes.btnSubmit}>
+                        <Button
+                            variant="contained"
+                            size="medium"
+                            color="secondary"
+                            type="submit"
+                        >
+                            Generate
+                        </Button>
+                    </div>
                 </form>
 
             );
@@ -189,7 +185,6 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
                             className={classes.input}
-                            id="formDate"
                             name="formDate"
                             label="Form date"
                             value={formDate}
@@ -198,52 +193,47 @@ export const RenderForm: React.FC<{ formType: string }> = ({ formType }) => {
                         />
                         <KeyboardDatePicker
                             className={classes.input}
-                            id="paymentDate"
                             name="paymentDate"
                             label="Payment date"
                             value={paymentDate}
                             onChange={handlePaymentDate}
                             required
                         />
-                        <TextField
-                            className={classes.input}
-                            id="amount"
-                            name="amount"
-                            label="Amount"
-                            type="number"
-                            required
-                            onChange={handleChangeAmount}
-                        />
-                        <TextField
-                            className={classes.input}
-                            id="currency"
-                            name="currency"
-                            label="Currency"
-                            type="text"
-                            required
-                            onChange={handleChangeCurrency}
-                        />
-                        <TextField
-                            className={classes.input}
-                            id="salaryMonth"
-                            name="salaryMonth"
-                            label="Salary Month"
-                            type="text"
-                            required
-                            onChange={handleChangeSalaryMonth}
-                        />
-                        <div className={classes.btnSubmit}>
-                            <Button
-                                variant="contained"
-                                size="medium"
-                                color="secondary"
-                                type="submit"
-                            >
-                                Generate
-                            </Button>
-                        </div>
-                        {redirection && navigate()}
                     </MuiPickersUtilsProvider>
+                    <TextField
+                        className={classes.input}
+                        name="amount"
+                        label="Amount"
+                        type="number"
+                        required
+                        onChange={handleChangeAmount}
+                    />
+                    <TextField
+                        className={classes.input}
+                        name="currency"
+                        label="Currency"
+                        type="text"
+                        required
+                        onChange={handleChangeCurrency}
+                    />
+                    <TextField
+                        className={classes.input}
+                        name="salaryMonth"
+                        label="Salary Month"
+                        type="text"
+                        required
+                        onChange={handleChangeSalaryMonth}
+                    />
+                    <div className={classes.btnSubmit}>
+                        <Button
+                            variant="contained"
+                            size="medium"
+                            color="secondary"
+                            type="submit"
+                        >
+                            Generate
+                        </Button>
+                    </div>
                 </form>
             );
         default:
