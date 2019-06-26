@@ -110,7 +110,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.personal.personalOib || ''}
+                    value = {(settingsData.personal && settingsData.personal.personalOib) || ''}
                 />
                 <TextField
                     name="streetName"
@@ -119,7 +119,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.personal.streetName}
+                    value = {settingsData.personal && settingsData.personal.streetName}
                 />
                 <TextField
                     name="streetNumber"
@@ -128,7 +128,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.personal.streetNumber}
+                    value = {settingsData.personal && settingsData.personal.streetNumber}
                 />
                 <TextField
                     name="postcode"
@@ -137,7 +137,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.personal.postcode}
+                    value = {settingsData.personal && settingsData.personal.postcode}
                 />
                 <TextField
                     name="city"
@@ -146,7 +146,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.personal.city}
+                    value = {settingsData.personal && settingsData.personal.city}
                 />
             </div>
             <div className="citySettings">
@@ -158,7 +158,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.city.cityName}
+                    value = {settingsData.personal && settingsData.city.cityName}
                 />
                 <TextField
                     name="cityIban"
@@ -167,7 +167,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.city.cityIban}
+                    value = {settingsData.personal && settingsData.city.cityIban}
                 />
                 <TextField
                     name="cityCode"
@@ -176,7 +176,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.city.cityCode}
+                    value = {settingsData.personal && settingsData.city.cityCode}
                 />
                 <TextField
                     name="surtax"
@@ -186,7 +186,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.city.surtax || ''}
+                    value = {(settingsData.personal && settingsData.city.surtax) || ''}
                 />
             </div>
             <div className="companySettings">
@@ -198,7 +198,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.company.companyOib || ''}
+                    value = {(settingsData.company && settingsData.company.companyOib) || ''}
                 />
                 <TextField
                     name="companyEmail"
@@ -207,7 +207,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.company.companyEmail}
+                    value = {settingsData.company && settingsData.company.companyEmail}
                 />
                 <TextField
                     name="companyName"
@@ -216,7 +216,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.company.companyName}
+                    value = {settingsData.company && settingsData.company.companyName}
                 />
                 <TextField
                     name="companyStreet"
@@ -225,7 +225,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.company.companyStreet}
+                    value = {settingsData.company && settingsData.company.companyStreet}
                 />
                 <TextField
                     name="companyCity"
@@ -234,7 +234,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.company.companyCity}
+                    value = {settingsData.company && settingsData.company.companyCity}
                 />
             </div>
             <div className="salarySettings">
@@ -246,7 +246,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.salary.amount || ''}
+                    value = {(settingsData.salary && settingsData.salary.amount) || ''}
                 />
                 <TextField
                     name="currency"
@@ -255,7 +255,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.salary.currency}
+                    value = {settingsData.salary && settingsData.salary.currency}
                 />
                 <TextField
                     name="nonTaxableAmount"
@@ -264,7 +264,7 @@ export const Settings: React.FC = () => {
                     required
                     className={classes.spacing}
                     onChange={onChange}
-                    value = {settingsData.salary.nonTaxableAmount || ''}
+                    value = {(settingsData.salary && settingsData.salary.nonTaxableAmount) || ''}
                 />
                 <TextField
                     name="salaryTax"
@@ -274,7 +274,7 @@ export const Settings: React.FC = () => {
                     className={classes.spacing}
                     placeholder='e.g. 20% = 0.20'
                     onChange={onChange}
-                    value = {settingsData.salary.salaryTax || ''}
+                    value = {(settingsData.salary && settingsData.salary.salaryTax) || ''}
                 />
                 <div>
                     <h5>Contributions</h5>
@@ -286,7 +286,7 @@ export const Settings: React.FC = () => {
                         className={classes.spacing}
                         placeholder='e.g. 20% = 0.20'
                         onChange={onChange}
-                        value = {settingsData.salary.healthInsuranceContribution || ''}
+                        value = {(settingsData.salary && settingsData.salary.healthInsuranceContribution) || ''}
                     />
                     <TextField
                         name="workSafetyContribution"
@@ -296,7 +296,7 @@ export const Settings: React.FC = () => {
                         className={classes.spacing}
                         placeholder='e.g. 20% = 0.20'
                         onChange={onChange}
-                        value = {settingsData.salary.workSafetyContribution || ''}
+                        value = {(settingsData.salary && settingsData.salary.workSafetyContribution) || ''}
                     />
                     <TextField
                         name="employmentContribution"
@@ -306,7 +306,7 @@ export const Settings: React.FC = () => {
                         className={classes.spacing}
                         placeholder='e.g. 20% = 0.20'
                         onChange={onChange}
-                        value = {settingsData.salary.employmentContribution || ''}
+                        value = {(settingsData.salary && settingsData.salary.employmentContribution) || ''}
                     />
                     <TextField
                         name="pensionPillar1Contribution"
@@ -316,7 +316,7 @@ export const Settings: React.FC = () => {
                         className={classes.spacing}
                         placeholder='e.g. 20% = 0.20'
                         onChange={onChange}
-                        value = {settingsData.salary.pensionPillar1Contribution || ''}
+                        value = {(settingsData.salary && settingsData.salary.pensionPillar1Contribution) || ''}
                     />
                     <TextField
                         name="pensionPillar2Contribution"
@@ -326,7 +326,7 @@ export const Settings: React.FC = () => {
                         className={classes.spacing}
                         placeholder='e.g. 20% = 0.20'
                         onChange={onChange}
-                        value = {settingsData.salary.pensionPillar2Contribution || ''}
+                        value = {(settingsData.salary && settingsData.salary.pensionPillar2Contribution) || ''}
                     />
                 </div>
             </div>
@@ -340,7 +340,7 @@ export const Settings: React.FC = () => {
                     className={classes.spacing}
                     placeholder='e.g. 20% = 0.20'
                     onChange={onChange}
-                    value = {settingsData.dividend.dividendTax || ''}
+                    value = {(settingsData.dividend && settingsData.dividend.dividendTax) || ''}
                 />
             </div>
             <div className={classes.btnSubmit}>

@@ -22,10 +22,10 @@ const App: React.FC = () => {
                     <Route path="/register" exact component={Registration}/>
                     <>
                         <Header/>
-                        <Route path="/" exact component={Dashboard} />
+                        <PrivateRoute path="/" exact component={Dashboard} />
                         <PrivateRoute path="/dashboard" component={Dashboard} />
                         <PrivateRoute path="/settings" exact component={Settings} />
-                        <Route path="/generate-form" exact component={GenerateForm} />
+                        <PrivateRoute path="/generate-form" exact component={GenerateForm} />
                     </>
                 </Switch>
             </Router>
