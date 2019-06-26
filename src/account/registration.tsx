@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import { UserRegistration } from './user-registration';
+import axios from 'axios';
+import { RouteComponentProps } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+
 
 const useStyles = makeStyles({
     container: {
@@ -21,44 +26,92 @@ const useStyles = makeStyles({
     },
 });
 
-export const Registration: React.FC = () => {
+export const Registration: React.FC<RouteComponentProps> = ({history}) => {
 
     const classes=useStyles();
 
+    const [state, setState] = useState<UserRegistration>({
+        email: '',
+        firstName: '',
+        lastName: '',
+        password: '',
+    });
+
+
+    const { enqueueSnackbar } = useSnackbar();
+
+
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setState({ ...state, [e.target.name]: e.target.value } as UserRegistration);
+    };
+
+    function handleSubmit(e: FormEvent) {
+        const headers = {
+            "Content-Type": "application/json"
+        }
+        e.preventDefault();
+        axios.post('http://localhost:5000/api/accounts', state, {"headers" : headers})
+            .then(() => {
+                    enqueueSnackbar('Registered successfully.', { autoHideDuration: 1000 });
+                    history.push('/login');
+
+            })
+            .catch(() => {
+                enqueueSnackbar('Error. Failed to add user.',{ autoHideDuration: 1000 })
+            })
+    }
+
     return(
-        <form className={classes.container}>
+        <form className={classes.container} onSubmit={handleSubmit}>
             <h2>Tax Form Generator</h2>
             <div className={classes.registerInput}>
                 <TextField
                     className={classes.input}
+                    id="email"
+                    name="email"
+                    value={state.email}
                     label="E-mail"
                     variant="outlined"
                     type="email"
                     required
+                    onChange={onChange}
                 />
                 <TextField
                     className={classes.input}
+                    id="first-name"
+                    name="firstName"
+                    value={state.firstName}
                     label="First Name"
                     variant="outlined"
                     type="text"
                     required
+                    onChange={onChange}
                 />
                 <TextField
                     className={classes.input}
+                    id="last-name"
+                    name="lastName"
+                    value={state.lastName}
                     label="Last Name"
                     variant="outlined"
                     type="text"
                     required
+                    onChange={onChange}
                 />
                 <TextField
                     className={classes.input}
+                    id="password"
+                    name="password"
+                    value={state.password}
                     label="Password"
                     variant="outlined"
                     type="password"
                     required
+                    onChange={onChange}
                 />
                 <TextField
                     className={classes.input}
+                    id="confirm-password"
                     label="Confirm Password"
                     variant="outlined"
                     type="password"
@@ -68,6 +121,7 @@ export const Registration: React.FC = () => {
                     variant="contained"
                     size="medium"
                     color="secondary"
+                    type="submit"
                 >
                     Register
                 </Button>

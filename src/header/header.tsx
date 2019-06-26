@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import { Menu } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/styles';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect, Switch } from 'react-router-dom';
 
 const useStyles = makeStyles({
     header: {
@@ -26,9 +26,8 @@ export const Header: React.FC = () => {
 
     const classes=useStyles();
 
-
     const [anchorEl, setAnchorEl] = React.useState(null);
-
+    const [redirection, setRedirection] = useState(false);
 
     function handleClick(event: any) {
         setAnchorEl(event.currentTarget);
@@ -36,6 +35,19 @@ export const Header: React.FC = () => {
 
     function handleClose() {
         setAnchorEl(null);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+        setRedirection(true);
+
+    }
+    function navigate() {
+        return(
+            <Switch>
+                <Redirect to="/login"/>
+            </Switch>
+        );
+
     }
     return (
         <div className={classes.header}>
@@ -62,6 +74,7 @@ export const Header: React.FC = () => {
                     <MenuItem onClick={handleClose}>Logout</MenuItem>
                 </Menu>
             </div>
+            {redirection && navigate()}
         </div>
 
     );
