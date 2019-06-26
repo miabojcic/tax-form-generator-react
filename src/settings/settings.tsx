@@ -3,31 +3,27 @@ import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 
-export const Settings: React.FC = () => {
-    const useStyles = makeStyles({
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-        },
-        margin: {
-            margin: '0 2px',
-        },
-        btnSubmit: {
-            marginTop: '30px',
-            alignSelf: 'center',
-        },
-        container: {
-            padding: '50px',
-            display: 'flex',
-            justifyContent: 'center',
-        },
+const useStyles = makeStyles({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '50px',
+    },
+    margin: {
+        margin: '0 2px',
+    },
+    btnSubmit: {
+        marginTop: '30px',
+        textAlign: 'center',
+    },
+});
 
-    });
+export const Settings: React.FC = () => {
+
     const classes=useStyles();
+
     return(
-      <div className={classes.container}>
-        <form className={classes.form}>
+        <form className={classes.container}>
             <div className="personalSettings">
                 <h2>Personal</h2>
                 <TextField
@@ -208,6 +204,5 @@ export const Settings: React.FC = () => {
                 </Button>
             </div>
         </form>
-      </div>
     );
 }

@@ -1,32 +1,33 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { UserRegistration } from './user-registration';
 import axios from 'axios';
-import { Redirect, Switch } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
 
-export const Registration: React.FC = () => {
+const useStyles = makeStyles({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '50px',
+        alignItems: 'center',
+    },
+    registerInput: {
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '50px',
+        alignItems: 'center',
+    },
+    input: {
+        margin: '10px',
+    },
+});
 
-    const useStyles = makeStyles({
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            margin: '50px',
-            alignItems: 'center',
-        },
-        registerInput: {
-            display: 'flex',
-            flexDirection: 'column',
-            margin: '50px',
-            alignItems: 'center',
-        },
-        input: {
-          margin: '10px',
-        },
-    });
+export const Registration: React.FC<RouteComponentProps> = ({history}) => {
+
     const classes=useStyles();
 
     const [state, setState] = useState<UserRegistration>({
@@ -36,37 +37,28 @@ export const Registration: React.FC = () => {
         password: '',
     });
 
-    const [redirection, setRedirection] = useState(false);
 
     const { enqueueSnackbar } = useSnackbar();
 
 
-    function onChange(e: any) {
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setState({ ...state, [e.target.name]: e.target.value } as UserRegistration);
-    }
+    };
 
-    function handleSubmit(e:any) {
+    function handleSubmit(e: FormEvent) {
         const headers = {
             "Content-Type": "application/json"
         }
         e.preventDefault();
         axios.post('http://localhost:5000/api/accounts', state, {"headers" : headers})
             .then(() => {
-                    setRedirection(true);
                     enqueueSnackbar('Registered successfully.', { autoHideDuration: 1000 });
+                    history.push('/login');
 
             })
             .catch(() => {
                 enqueueSnackbar('Error. Failed to add user.',{ autoHideDuration: 1000 })
             })
-    }
-    function navigate() {
-        return(
-            <Switch>
-                <Redirect to="/login"/>
-            </Switch>
-        );
-
     }
 
     return(
@@ -134,7 +126,6 @@ export const Registration: React.FC = () => {
                     Register
                 </Button>
             </div>
-            {redirection && navigate()}
         </form>
     );
 }
