@@ -1,31 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import { Menu } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/styles';
-import { NavLink } from 'react-router-dom';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { auth } from '../shared/auth';
 
-export const Header: React.FC = () => {
-    const useStyles = makeStyles({
-        header: {
-            padding: '1rem',
-            display: 'flex',
-            backgroundColor: 'red',
-        },
-        spacer: {
-            flexGrow: 1,
-        },
-        navLinks: {
-          textDecoration:'none',
-        },
-        btn: {
-            color: 'white',
-        },
-    });
+const useStyles = makeStyles({
+    header: {
+        padding: '1rem',
+        display: 'flex',
+        backgroundColor: 'red',
+    },
+    spacer: {
+        flexGrow: 1,
+    },
+    navLinks: {
+        textDecoration:'none',
+    },
+    btn: {
+        color: 'white',
+    },
+});
+
+const Header: React.FC<RouteComponentProps> = ({ history }) => {
+
     const classes=useStyles();
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
+    const [anchorEl, setAnchorEl] = useState(null);
 
     function handleClick(event: any) {
         setAnchorEl(event.currentTarget);
@@ -33,7 +35,10 @@ export const Header: React.FC = () => {
 
     function handleClose() {
         setAnchorEl(null);
+        auth.logout();
+        history.push('/login');
     }
+
     return (
         <div className={classes.header}>
             <NavLink className={classes.navLinks} to='/dashboard'>
@@ -62,4 +67,6 @@ export const Header: React.FC = () => {
         </div>
 
     );
-}
+};
+
+export default withRouter(Header);
