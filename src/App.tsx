@@ -10,28 +10,30 @@ import { SnackbarProvider } from 'notistack';
 import { AuthProvider } from './shared/auth-context';
 import { PrivateRoute } from './shared/private-route';
 
-
 const App: React.FC = () => {
-
   return (
-      <AuthProvider>
-        <SnackbarProvider maxSnack={1} >
-            <Router>
-                <Switch>
-                    <Route path="/login" exact component={Login} />
-                    <Route path="/register" exact component={Registration}/>
-                    <>
-                        <Header/>
-                        <PrivateRoute path="/" exact component={Dashboard} />
-                        <PrivateRoute path="/dashboard" component={Dashboard} />
-                        <PrivateRoute path="/settings" exact component={Settings} />
-                        <PrivateRoute path="/generate-form" exact component={GenerateForm} />
-                    </>
-                </Switch>
-            </Router>
-        </SnackbarProvider>
-      </AuthProvider>
+    <AuthProvider>
+      <SnackbarProvider maxSnack={1}>
+        <Router>
+          <Switch>
+            <Route path="/login" exact component={Login} />
+            <Route path="/register" exact component={Registration} />
+            <>
+              <Header />
+              <PrivateRoute path="/" exact component={Dashboard} />
+              <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PrivateRoute path="/settings" exact component={Settings} />
+              <PrivateRoute
+                path="/generate-form"
+                exact
+                component={GenerateForm}
+              />
+            </>
+          </Switch>
+        </Router>
+      </SnackbarProvider>
+    </AuthProvider>
   );
-}
+};
 
 export default App;
