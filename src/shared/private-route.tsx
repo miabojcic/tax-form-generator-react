@@ -1,25 +1,22 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router';
-import { AuthConsumer } from './auth-context';
+import { useAuthValue } from './auth-context';
 
 export const PrivateRoute: React.FC<any> = ({
   component: Component,
   ...rest
 }) => {
+  const { isLoggedIn } = useAuthValue();
   return (
-    <AuthConsumer>
-      {userAuthState => (
-        <Route
-          {...rest}
-          render={props => {
-            return userAuthState.isLoggedIn === true ? (
-              <Component {...props} />
-            ) : (
-              <Redirect to="/login" />
-            );
-          }}
-        />
-      )}
-    </AuthConsumer>
+    <Route
+      {...rest}
+      render={props => {
+        return isLoggedIn ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" />
+        );
+      }}
+    />
   );
 };

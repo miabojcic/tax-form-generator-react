@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
-import { Menu } from '@material-ui/core';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/styles';
+import { Menu, MenuItem, makeStyles } from '@material-ui/core';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { auth } from '../shared/auth';
+import { useAuthValue } from '../shared/auth-context';
 
 const useStyles = makeStyles({
   header: {
@@ -28,6 +27,8 @@ const Header: React.FC<RouteComponentProps> = ({ history }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
+  const { user, setLoggedInUser } = useAuthValue();
+
   function handleClick(event: any) {
     setAnchorEl(event.currentTarget);
   }
@@ -35,6 +36,7 @@ const Header: React.FC<RouteComponentProps> = ({ history }) => {
   function handleClose() {
     setAnchorEl(null);
     auth.logout();
+    setLoggedInUser(null);
     history.push('/login');
   }
 
@@ -55,24 +57,30 @@ const Header: React.FC<RouteComponentProps> = ({ history }) => {
           Settings
         </Button>
       </NavLink>
-      <div className={classes.spacer}></div>
+      <div className={classes.spacer} />
       <div>
-        <Button
-          aria-owns={anchorEl ? 'simple-menu' : undefined}
-          aria-haspopup="true"
-          onClick={handleClick}
-          className={classes.btn}
-        >
-          miabojcic@gmail.com
-        </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
+        {
+          user && (
+              <>
+                <Button
+                    aria-owns={anchorEl ? 'simple-menu' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                    className={classes.btn}
+                >
+                  {user && user.email}
+                </Button>
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>Logout</MenuItem>
+                </Menu>
+              </>
+          )
+        }
       </div>
     </div>
   );

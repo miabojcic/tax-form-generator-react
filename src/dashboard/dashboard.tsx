@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { authHttp } from '../shared/http';
-import { Table } from '@material-ui/core';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
-import Paper from '@material-ui/core/Paper';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Table, TableHead, TableRow, TableCell, TableBody, Paper, makeStyles } from '@material-ui/core';
 import { Form } from '../generate-form/form';
 import { RouteComponentProps } from 'react-router';
 
