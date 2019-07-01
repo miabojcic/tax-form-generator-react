@@ -1,7 +1,5 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import Button from '@material-ui/core/Button';
+import { TextField, Button, makeStyles } from '@material-ui/core';
 import { SettingsData } from './settings-data';
 import { authHttp } from '../shared/http';
 import { useSnackbar } from 'notistack';

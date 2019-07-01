@@ -2,26 +2,29 @@ import { LoginResponse } from '../login/login-response';
 import { JwtToken } from '../login/jwt-token';
 // @ts-ignore
 import * as jwt_decode from 'jwt-decode';
+import { User } from '../login/user';
 
 const auth = {
+  accessToken: () => localStorage.getItem('accessToken'),
+  refreshToken: () => localStorage.getItem('refreshToken'),
   logout: () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
   },
-  storeSessionData: (data: LoginResponse) => {
+  decodeToken: (jwtToken: string): User => {
+    const decodedToken: JwtToken = jwt_decode(jwtToken);
+    return {
+      id: +decodedToken.id,
+      email: decodedToken.email,
+      firstName: decodedToken.firstName,
+      lastName: decodedToken.lastName
+    };
+  },
+  storeSessionData: (data: LoginResponse, user: User) => {
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
-
-    const accessToken = localStorage.getItem('accessToken');
-    const decodedAccessToken: JwtToken = jwt_decode(accessToken);
-    const loggedInUser = {
-      id: +decodedAccessToken.id,
-      email: decodedAccessToken.email,
-      firstName: decodedAccessToken.firstName,
-      lastName: decodedAccessToken.lastName
-    };
-    localStorage.setItem('user', JSON.stringify(loggedInUser));
+    localStorage.setItem('user', JSON.stringify(user));
   }
 };
 

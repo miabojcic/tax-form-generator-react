@@ -1,11 +1,9 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
-import { TextField } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { TextField, makeStyles, Button } from '@material-ui/core';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Credentials } from './credentials';
 import { useSnackbar } from 'notistack';
-import { AuthConsumer } from '../shared/auth-context';
+import { useAuthValue } from '../shared/auth-context';
 import { http } from '../shared/http';
 import { LoginResponse } from './login-response';
 import { auth } from '../shared/auth';
@@ -33,11 +31,7 @@ const useStyles = makeStyles({
   }
 });
 
-interface LoginProps extends RouteComponentProps {
-  updateState: (x: boolean, callback?: () => void) => void;
-}
-
-const Login: React.FC<LoginProps> = props => {
+const Login: React.FC<RouteComponentProps> = ({history}) => {
   const classes = useStyles();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -53,16 +47,18 @@ const Login: React.FC<LoginProps> = props => {
     } as Credentials);
   };
 
+  const { setLoggedInUser } = useAuthValue();
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     http
       .post<LoginResponse>('api/auth', credentials)
       .then(response => {
-        auth.storeSessionData(response.data);
-        props.updateState(true, () => {
-          props.history.push('/dashboard');
-        });
+        const user = auth.decodeToken(response.data.accessToken);
+        auth.storeSessionData(response.data, user);
+        setLoggedInUser(user);
+        history.push('/dashboard');
       })
       .catch(() => {
         enqueueSnackbar('Error. Email and/or password incorrect.', {
@@ -110,12 +106,4 @@ const Login: React.FC<LoginProps> = props => {
   );
 };
 
-export default (props: RouteComponentProps) => (
-  <AuthConsumer>
-    {({ updateState }) => (
-      <>
-        <Login {...props} updateState={updateState} />
-      </>
-    )}
-  </AuthConsumer>
-);
+export default Login;

@@ -1,6 +1,5 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
-import { TextField } from '@material-ui/core';
+import { TextField, makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { UserRegistration } from './user-registration';
 import { RouteComponentProps } from 'react-router-dom';

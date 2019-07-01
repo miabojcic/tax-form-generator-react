@@ -1,6 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { FormControl, InputLabel, MenuItem, Select, makeStyles } from '@material-ui/core';
 import { RenderForm } from './render-form';
 import { RouteComponentProps } from 'react-router';
 

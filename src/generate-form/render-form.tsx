@@ -1,11 +1,10 @@
 import React, { ChangeEvent, FormEvent } from 'react';
-import { makeStyles } from '@material-ui/styles';
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { TextField } from '@material-ui/core';
+import { TextField, makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { DividendJOPPD, SalaryJOPPD } from './form';
 import { authHttp } from '../shared/http';

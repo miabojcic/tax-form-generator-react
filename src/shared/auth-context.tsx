@@ -1,30 +1,31 @@
-import React, { createContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { User } from '../login/user';
 
-let initialState = {
-  isLoggedIn: false, //(null as any as boolean),
-  updateState: (x: boolean, callback?: () => void) => {}
+export interface AuthState {
+  isLoggedIn: boolean,
+  user: User | null,
+  setLoggedInUser: (user: User | null) => void
+}
+
+export const AuthContext = createContext<AuthState>({
+  isLoggedIn: false,
+  user: null,
+  setLoggedInUser: () => {}
+});
+
+export const AuthProvider: React.FC = ({ children }) => {
+  const [state, setState] = useState<AuthState>({
+    isLoggedIn: false,
+    user: null,
+    setLoggedInUser: (user: User | null) => {
+      setState((state: AuthState) => ({ ...state, isLoggedIn: !!user,  user}))
+    }
+  });
+  return (
+    <AuthContext.Provider value={state}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-//initial context
-export const AuthContext = createContext(initialState);
-
-//exportable consumer that can be injected into components
-export const AuthConsumer = AuthContext.Consumer;
-
-//provider
-export class AuthProvider extends React.Component {
-  state = {
-    isLoggedIn: false,
-    updateState: (state: boolean, callback?: () => void) => {
-      this.setState({ isLoggedIn: state }, callback);
-    }
-  };
-
-  render() {
-    return (
-      <AuthContext.Provider value={this.state}>
-        {this.props.children}
-      </AuthContext.Provider>
-    );
-  }
-}
+export const useAuthValue = () => useContext(AuthContext);

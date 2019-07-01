@@ -1,17 +1,16 @@
 import axios from 'axios';
+import { auth } from './auth';
 
 const baseUrl = 'http://localhost:5000';
-
-const accessToken = localStorage.getItem('accessToken');
 
 const headers = {
   'Content-Type': 'application/json'
 };
 
-const authHeaders = {
+const getAuthHeaders = () => ({
   'Content-Type': 'application/json',
-  Authorization: `Bearer ${accessToken}`
-};
+  Authorization: `Bearer ${auth.accessToken()}`
+});
 
 const http = {
   post: <T>(url: string, data: any) => {
@@ -24,10 +23,10 @@ const http = {
 
 const authHttp = {
   post: <T>(url: string, data: any) => {
-    return axios.post<T>(`${baseUrl}/${url}`, data, { headers: authHeaders });
+    return axios.post<T>(`${baseUrl}/${url}`, data, { headers: getAuthHeaders() });
   },
   get: <T>(url: string) => {
-    return axios.get<T>(`${baseUrl}/${url}`, { headers: authHeaders });
+    return axios.get<T>(`${baseUrl}/${url}`, { headers: getAuthHeaders() });
   }
 };
 
